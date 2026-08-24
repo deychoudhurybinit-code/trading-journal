@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section, .stats-section, .trades-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-section h2, .stats-section h2, .trades-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .trades-section {
+            grid-column: 1 / -1;
+        }
+
+        .trades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .trades-table thead {
+            background-color: #f5f5f5;
+        }
+
+        .trades-table th {
+            padding: 12px;
+            text-align: left;
+            color: #333;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .trades-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .trades-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .profit {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .loss {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            width: auto;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trades-table {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Trading Journal</h1>
+            <p>Track, analyze, and improve your trading performance</p>
+        </header>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>New Trade Entry</h2>
+                <form id="tradeForm">
+                    <div class="form-group">
+                        <label for="symbol">Symbol</label>
+                        <input type="text" id="symbol" placeholder="e.g., AAPL, BTC/USD" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Trade Type</label>
+                        <select id="type" required>
+                            <option value="">Select Type</option>
+                            <option value="Long">Long</option>
+                            <option value="Short">Short</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entryPrice">Entry Price</label>
+                        <input type="number" id="entryPrice" step="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exitPrice">Exit Price</label>
+                        <input type="number" id="exitPrice" step="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" step="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" rows="4" placeholder="Trade strategy, reasons, observations..."></textarea>
+                    </div>
+
+                    <button type="submit">Add Trade</button>
+                </form>
+            </div>
+
+            <div class="stats-section">
+                <h2>Performance Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Trades</h3>
+                        <div class="value" id="totalTrades">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Win Rate</h3>
+                        <div class="value" id="winRate">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Profit/Loss</h3>
+                        <div class="value" id="totalPL">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Trade</h3>
+                        <div class="value" id="avgTrade">$0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="trades-section">
+            <h2>Trade History</h2>
+            <table class="trades-table" id="tradesTable">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Type</th>
+                        <th>Entry</th>
+                        <th>Exit</th>
+                        <th>Qty</th>
+                        <th>P/L</th>
+                        <th>Date</th>
+                        <th>Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tradesBody">
+                    <tr>
+                        <td colspan="9" class="empty-message">No trades recorded yet. Add your first trade above!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Load trades from localStorage
+        function loadTrades() {
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            return trades;
+        }
+
+        // Save trades to localStorage
+        function saveTrades(trades) {
+            localStorage.setItem('trades', JSON.stringify(trades));
+        }
+
+        // Add trade form submission
+        document.getElementById('tradeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const trade = {
+                id: Date.now(),
+                symbol: document.getElementById('symbol').value,
+                type: document.getElementById('type').value,
+                entryPrice: parseFloat(document.getElementById('entryPrice').value),
+                exitPrice: parseFloat(document.getElementById('exitPrice').value),
+                quantity: parseFloat(document.getElementById('quantity').value),
+                date: document.getElementById('date').value,
+                notes: document.getElementById('notes').value
+            };
+
+            const trades = loadTrades();
+            trades.push(trade);
+            saveTrades(trades);
+
+            this.reset();
+            document.getElementById('date').valueAsDate = new Date();
+            renderTrades();
+            updateStats();
+        });
+
+        // Render trades in table
+        function renderTrades() {
+            const trades = loadTrades();
+            const tbody = document.getElementById('tradesBody');
+
+            if (trades.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="empty-message">No trades recorded yet. Add your first trade above!</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = trades.map(trade => {
+                const pl = (trade.exitPrice - trade.entryPrice) * trade.quantity;
+                const plClass = pl >= 0 ? 'profit' : 'loss';
+                const plSign = pl >= 0 ? '+' : '';
+
+                return `
+                    <tr>
+                        <td>${trade.symbol}</td>
+                        <td>${trade.type}</td>
+                        <td>$${trade.entryPrice.toFixed(2)}</td>
+                        <td>$${trade.exitPrice.toFixed(2)}</td>
+                        <td>${trade.quantity}</td>
+                        <td class="${plClass}">${plSign}$${pl.toFixed(2)}</td>
+                        <td>${trade.date}</td>
+                        <td>${trade.notes || '-'}</td>
+                        <td><button class="delete-btn" onclick="deleteTrade(${trade.id})">Delete</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Delete trade
+        function deleteTrade(id) {
+            if (confirm('Are you sure you want to delete this trade?')) {
+                let trades = loadTrades();
+                trades = trades.filter(trade => trade.id !== id);
+                saveTrades(trades);
+                renderTrades();
+                updateStats();
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const trades = loadTrades();
+
+            if (trades.length === 0) {
+                document.getElementById('totalTrades').textContent = '0';
+                document.getElementById('winRate').textContent = '0%';
+                document.getElementById('totalPL').textContent = '$0.00';
+                document.getElementById('avgTrade').textContent = '$0.00';
+                return;
+            }
+
+            let totalPL = 0;
+            let winCount = 0;
+
+            trades.forEach(trade => {
+                const pl = (trade.exitPrice - trade.entryPrice) * trade.quantity;
+                totalPL += pl;
+                if (pl > 0) winCount++;
+            });
+
+            const winRate = ((winCount / trades.length) * 100).toFixed(1);
+            const avgTrade = (totalPL / trades.length).toFixed(2);
+
+            document.getElementById('totalTrades').textContent = trades.length;
+            document.getElementById('winRate').textContent = winRate + '%';
+            document.getElementById('totalPL').textContent = '$' + totalPL.toFixed(2);
+            document.getElementById('avgTrade').textContent = '$' + avgTrade;
+        }
+
+        // Initialize
+        document.getElementById('date').valueAsDate = new Date();
+        renderTrades();
+        updateStats();
+    </script>
+</body>
+</html>
