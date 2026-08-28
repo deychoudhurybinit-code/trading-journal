@@ -8,6 +8,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- PDF LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 
 *{
@@ -475,6 +479,10 @@ All Trading Data
 
 <button onclick="refreshDashboard()">
 ↻ REFRESH
+</button>
+
+<button onclick="saveDashboardPDF()">
+SAVE PDF
 </button>
 
 </div>
@@ -2962,6 +2970,298 @@ window.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   SAVE FULL DASHBOARD AS PDF
+========================================================= */
+
+async function saveDashboardPDF(){
+
+    const dashboard =
+        document.querySelector(
+            ".dashboard"
+        );
+
+    if(!dashboard)
+        return;
+
+
+    const button =
+        event &&
+        event.target
+        ? event.target
+        : null;
+
+
+    const originalText =
+        button
+        ? button.textContent
+        : "SAVE PDF";
+
+
+    if(button){
+
+        button.textContent =
+            "CREATING PDF...";
+
+        button.disabled = true;
+
+    }
+
+
+    try{
+
+        /*
+           Wait for charts and page rendering
+           to finish before taking the screenshot.
+        */
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    500
+                )
+        );
+
+
+        /*
+           Capture the COMPLETE dashboard
+           visually.
+
+           This includes:
+           - Header
+           - KPI cards
+           - Ranking cards
+           - Chart.js charts
+           - Strategy cards
+           - Ranking table
+           - Trade detail table
+           - Footer
+           - Backgrounds
+           - Borders
+           - Shadows
+           - Text
+        */
+
+        const canvas =
+            await html2canvas(
+                dashboard,
+                {
+
+                    scale:2,
+
+                    useCORS:true,
+
+                    allowTaint:true,
+
+                    backgroundColor:
+                        "#eef0f3",
+
+                    logging:false,
+
+                    windowWidth:
+                        dashboard.scrollWidth,
+
+                    windowHeight:
+                        dashboard.scrollHeight,
+
+                    scrollX:0,
+
+                    scrollY:0
+
+                }
+            );
+
+
+        const imgData =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.95
+            );
+
+
+        /*
+           Landscape A4 PDF.
+           The complete dashboard image is
+           scaled to the PDF width and split
+           vertically across multiple pages.
+        */
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const pdf =
+            new jsPDF(
+                {
+
+                    orientation:
+                        "landscape",
+
+                    unit:
+                        "mm",
+
+                    format:
+                        "a4",
+
+                    compress:
+                        true
+
+                }
+            );
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+
+        const margin =
+            5;
+
+
+        const usableWidth =
+            pageWidth -
+            (margin*2);
+
+
+        const imageWidth =
+            canvas.width;
+
+
+        const imageHeight =
+            canvas.height;
+
+
+        const scale =
+            usableWidth /
+            imageWidth;
+
+
+        const scaledHeight =
+            imageHeight *
+            scale;
+
+
+        let heightLeft =
+            scaledHeight;
+
+
+        let position =
+            margin;
+
+
+        /*
+           First page
+        */
+
+        pdf.addImage(
+            imgData,
+            "JPEG",
+            margin,
+            position,
+            usableWidth,
+            scaledHeight,
+            undefined,
+            "FAST"
+        );
+
+
+        heightLeft -=
+            pageHeight -
+            margin -
+            margin;
+
+
+        /*
+           Additional pages
+        */
+
+        while(
+            heightLeft > 0
+        ){
+
+            position =
+                margin -
+                (
+                    scaledHeight -
+                    heightLeft
+                );
+
+
+            pdf.addPage();
+
+
+            pdf.addImage(
+                imgData,
+                "JPEG",
+                margin,
+                position,
+                usableWidth,
+                scaledHeight,
+                undefined,
+                "FAST"
+            );
+
+
+            heightLeft -=
+                pageHeight -
+                margin -
+                margin;
+
+        }
+
+
+        /*
+           File name
+        */
+
+        const safeMonth =
+            selectedMonth
+            .replace(
+                /[^0-9-]/g,
+                ""
+            );
+
+
+        pdf.save(
+            "Strategy-Accuracy-Dashboard-" +
+            safeMonth +
+            ".pdf"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "PDF creation error:",
+            error
+        );
+
+
+        alert(
+            "Unable to create PDF. Please try again."
+        );
+
+    }
+
+
+    if(button){
+
+        button.textContent =
+            originalText;
+
+        button.disabled = false;
+
+    }
+
+}
 
 
 /* =========================================================
