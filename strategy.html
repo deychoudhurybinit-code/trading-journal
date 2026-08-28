@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Strategy Accuracy Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- PDF LIBRARIES -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
 
 *{
     box-sizing:border-box;
@@ -41,9 +45,11 @@ body{
     border-radius:14px;
     padding:20px;
     margin-bottom:18px;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     gap:15px;
     flex-wrap:wrap;
 }
@@ -79,8 +85,10 @@ body{
     padding:9px 13px;
     border:0;
     border-radius:7px;
+
     background:white;
     color:#111;
+
     font-weight:bold;
     cursor:pointer;
 }
@@ -97,6 +105,7 @@ body{
     display:grid;
     grid-template-columns:
         repeat(5,1fr);
+
     gap:12px;
     margin-bottom:18px;
 }
@@ -104,8 +113,12 @@ body{
 .kpi{
     background:white;
     border-radius:12px;
+
     padding:17px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.08);
+
     border:1px solid #ddd;
 }
 
@@ -135,9 +148,12 @@ body{
 .section{
     background:white;
     border-radius:12px;
+
     padding:17px;
     margin-bottom:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.08);
 }
 
 .section-title{
@@ -147,28 +163,33 @@ body{
 }
 
 /* =========================================================
-   RANKING HIGHLIGHTS
+   HIGHLIGHTS
 ========================================================= */
 
 .highlight-grid{
     display:grid;
     grid-template-columns:
         repeat(3,1fr);
+
     gap:12px;
     margin-bottom:18px;
 }
 
 .highlight{
     background:#f7f7f7;
+
     border:1px solid #ddd;
     border-radius:10px;
+
     padding:15px;
 }
 
 .highlight-title{
     font-size:11px;
     font-weight:bold;
+
     color:#666;
+
     text-transform:uppercase;
 }
 
@@ -192,6 +213,7 @@ body{
     display:grid;
     grid-template-columns:
         1fr 1fr;
+
     gap:18px;
 }
 
@@ -212,13 +234,16 @@ body{
     display:grid;
     grid-template-columns:
         repeat(2,1fr);
+
     gap:15px;
 }
 
 .strategy-card{
     border:1px solid #d5d5d5;
     border-radius:12px;
+
     padding:16px;
+
     background:#fafafa;
 }
 
@@ -226,6 +251,7 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     gap:10px;
     margin-bottom:12px;
 }
@@ -242,15 +268,19 @@ body{
 
 .stats-grid{
     display:grid;
+
     grid-template-columns:
         repeat(4,1fr);
+
     gap:7px;
 }
 
 .stat{
     background:white;
+
     border:1px solid #ddd;
     border-radius:7px;
+
     padding:8px;
 }
 
@@ -269,14 +299,20 @@ body{
 .strategy-extra{
     margin-top:12px;
     padding-top:10px;
+
     border-top:1px solid #ddd;
 }
 
 .detail-line{
     display:grid;
-    grid-template-columns:140px 1fr;
+
+    grid-template-columns:
+        140px 1fr;
+
     padding:5px 0;
+
     font-size:10px;
+
     border-bottom:1px solid #eee;
 }
 
@@ -308,22 +344,30 @@ body{
 
 table{
     width:100%;
+
     border-collapse:collapse;
+
     min-width:1050px;
 }
 
 th{
     background:#111;
     color:white;
+
     padding:10px 7px;
+
     font-size:10px;
+
     text-align:center;
 }
 
 td{
     border:1px solid #ddd;
+
     padding:9px 6px;
+
     text-align:center;
+
     font-size:10px;
 }
 
@@ -360,8 +404,11 @@ td:nth-child(2){
 
 .badge{
     display:inline-block;
+
     padding:4px 7px;
+
     border-radius:5px;
+
     font-size:9px;
     font-weight:bold;
 }
@@ -384,9 +431,12 @@ td:nth-child(2){
 
 .footer{
     text-align:center;
+
     color:#777;
+
     font-size:11px;
     font-weight:bold;
+
     padding:12px;
 }
 
@@ -441,12 +491,324 @@ td:nth-child(2){
 
 }
 
+/* =========================================================
+   PRINT / SAVE AS PDF
+========================================================= */
+
+@page{
+    size:A4;
+    margin:10mm;
+}
+
+@media print{
+
+    html,
+    body{
+        background:white !important;
+        margin:0 !important;
+        padding:0 !important;
+    }
+
+    body{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+
+    .dashboard{
+        width:100% !important;
+        max-width:none !important;
+
+        margin:0 !important;
+        padding:0 !important;
+    }
+
+    /* Hide controls */
+
+    .header-actions{
+        display:none !important;
+    }
+
+    /* Header */
+
+    .header{
+        border-radius:0 !important;
+
+        margin-bottom:8mm !important;
+
+        padding:6mm !important;
+
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .header h1{
+        font-size:22px !important;
+    }
+
+    .header p{
+        font-size:10px !important;
+    }
+
+    /* KPI */
+
+    .kpi-grid{
+        grid-template-columns:
+            repeat(4,1fr) !important;
+
+        gap:3mm !important;
+
+        margin-bottom:6mm !important;
+    }
+
+    .kpi{
+        padding:4mm !important;
+
+        box-shadow:none !important;
+
+        border:1px solid #ccc !important;
+
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .kpi-label{
+        font-size:8px !important;
+    }
+
+    .kpi-value{
+        font-size:17px !important;
+    }
+
+    .kpi-small{
+        font-size:7px !important;
+    }
+
+    /* Sections */
+
+    .section{
+        border-radius:0 !important;
+
+        box-shadow:none !important;
+
+        border:1px solid #ddd !important;
+
+        margin-bottom:6mm !important;
+
+        padding:4mm !important;
+
+        break-inside:auto;
+    }
+
+    .section-title{
+        font-size:13px !important;
+
+        margin-bottom:4mm !important;
+    }
+
+    /* Highlights */
+
+    .highlight-grid{
+        grid-template-columns:
+            repeat(3,1fr) !important;
+
+        gap:3mm !important;
+
+        margin-bottom:6mm !important;
+    }
+
+    .highlight{
+        padding:4mm !important;
+
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .highlight-title{
+        font-size:8px !important;
+    }
+
+    .highlight-name{
+        font-size:13px !important;
+    }
+
+    .highlight-value{
+        font-size:9px !important;
+    }
+
+    /* Charts */
+
+    .chart-grid{
+        grid-template-columns:
+            1fr 1fr !important;
+
+        gap:5mm !important;
+    }
+
+    .chart-box{
+        min-height:0 !important;
+
+        height:78mm !important;
+
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .chart-container{
+        height:65mm !important;
+    }
+
+    /* Strategy cards */
+
+    .strategy-grid{
+        grid-template-columns:
+            1fr 1fr !important;
+
+        gap:4mm !important;
+    }
+
+    .strategy-card{
+        padding:4mm !important;
+
+        background:#fafafa !important;
+
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .strategy-name{
+        font-size:12px !important;
+    }
+
+    .strategy-rate{
+        font-size:15px !important;
+    }
+
+    .stats-grid{
+        grid-template-columns:
+            repeat(4,1fr) !important;
+
+        gap:2mm !important;
+    }
+
+    .stat{
+        padding:2.5mm !important;
+    }
+
+    .stat-label{
+        font-size:6.5px !important;
+    }
+
+    .stat-value{
+        font-size:9px !important;
+    }
+
+    .detail-line{
+        grid-template-columns:
+            90px 1fr !important;
+
+        padding:2mm 0 !important;
+
+        font-size:7.5px !important;
+    }
+
+    /* Ranking table */
+
+    table{
+        width:100% !important;
+
+        min-width:0 !important;
+    }
+
+    th{
+        font-size:7px !important;
+
+        padding:2.5mm 1.5mm !important;
+    }
+
+    td{
+        font-size:7px !important;
+
+        padding:2.2mm 1.5mm !important;
+    }
+
+    /* Trade table */
+
+    .trade-detail-table{
+        min-width:0 !important;
+
+        width:100% !important;
+
+        table-layout:fixed !important;
+    }
+
+    .trade-detail-table th{
+        font-size:5.5px !important;
+
+        padding:2mm 1mm !important;
+    }
+
+    .trade-detail-table td{
+        font-size:5.5px !important;
+
+        padding:2mm 1mm !important;
+
+        word-break:break-word !important;
+    }
+
+    .badge{
+        font-size:5.5px !important;
+
+        padding:1.5mm 1mm !important;
+    }
+
+    /* Prevent individual rows from splitting */
+
+    tr{
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    /* Footer */
+
+    .footer{
+        font-size:8px !important;
+
+        padding:4mm !important;
+    }
+
+}
+
+/* =========================================================
+   PRINT LANDSCAPE FOR TRADE DETAILS
+========================================================= */
+
+@media print and (orientation:landscape){
+
+    @page{
+        size:A4 landscape;
+        margin:8mm;
+    }
+
+    .trade-detail-table th{
+        font-size:6px !important;
+    }
+
+    .trade-detail-table td{
+        font-size:6px !important;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="dashboard">
+
 
 <!-- =========================================================
      HEADER
@@ -454,38 +816,43 @@ td:nth-child(2){
 
 <div class="header">
 
-<div>
+    <div>
 
-<h1>
-STRATEGY ACCURACY DASHBOARD
-</h1>
+        <h1>
+            STRATEGY ACCURACY DASHBOARD
+        </h1>
 
-<p id="monthTitle">
-All Trading Data
-</p>
+        <p id="monthTitle">
+            All Trading Data
+        </p>
 
-</div>
+    </div>
 
-<div class="header-actions">
 
-<input
-    type="month"
-    id="dashboardMonth"
->
+    <div class="header-actions">
 
-<button onclick="backToDaily()">
-← BACK TO DAILY JOURNAL
-</button>
+        <input
+            type="month"
+            id="dashboardMonth"
+        >
 
-<button onclick="refreshDashboard()">
-↻ REFRESH
-</button>
+        <button
+            onclick="backToDaily()">
+            ← BACK TO DAILY JOURNAL
+        </button>
 
-<button onclick="saveDashboardPDF()">
-SAVE PDF
-</button>
+        <button
+            onclick="refreshDashboard()">
+            ↻ REFRESH
+        </button>
 
-</div>
+        <button
+            id="pdfButton"
+            onclick="saveDashboardPDF()">
+            SAVE AS PDF
+        </button>
+
+    </div>
 
 </div>
 
@@ -496,150 +863,175 @@ SAVE PDF
 
 <div class="kpi-grid">
 
-<div class="kpi">
-<div class="kpi-label">
-Total Strategies
-</div>
-<div
-    class="kpi-value"
-    id="kpiStrategies"
->
-0
-</div>
-<div class="kpi-small">
-7 available strategies
-</div>
-</div>
-
 
 <div class="kpi">
-<div class="kpi-label">
-Total Trades
-</div>
-<div
-    class="kpi-value"
-    id="kpiTrades"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Total Strategies
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiStrategies">
+        0
+    </div>
+
+    <div class="kpi-small">
+        7 available strategies
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Profitable Trades
-</div>
-<div
-    class="kpi-value"
-    id="kpiWins"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Total Trades
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiTrades">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Losing Trades
-</div>
-<div
-    class="kpi-value"
-    id="kpiLosses"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Profitable Trades
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiWins">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-No Profit / No Loss
-</div>
-<div
-    class="kpi-value"
-    id="kpiBreakeven"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Losing Trades
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiLosses">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Win Rate / Accuracy
-</div>
-<div
-    class="kpi-value"
-    id="kpiWinRate"
->
-0%
-</div>
+
+    <div class="kpi-label">
+        No Profit / No Loss
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiBreakeven">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Average Points / Trade
-</div>
-<div
-    class="kpi-value"
-    id="kpiAvgPoints"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Win Rate / Accuracy
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiWinRate">
+        0%
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Total Points
-</div>
-<div
-    class="kpi-value"
-    id="kpiTotalPoints"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Average Points / Trade
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiAvgPoints">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Average Winning Points
-</div>
-<div
-    class="kpi-value"
-    id="kpiAvgWinPoints"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Total Points
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiTotalPoints">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Average Losing Points
-</div>
-<div
-    class="kpi-value"
-    id="kpiAvgLossPoints"
->
-0
-</div>
+
+    <div class="kpi-label">
+        Average Winning Points
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiAvgWinPoints">
+        0
+    </div>
+
 </div>
 
 
 <div class="kpi">
-<div class="kpi-label">
-Total P&L
+
+    <div class="kpi-label">
+        Average Losing Points
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiAvgLossPoints">
+        0
+    </div>
+
 </div>
-<div
-    class="kpi-value"
-    id="kpiPL"
->
-₹0.00
+
+
+<div class="kpi">
+
+    <div class="kpi-label">
+        Total P&amp;L
+    </div>
+
+    <div
+        class="kpi-value"
+        id="kpiPL">
+        ₹0.00
+    </div>
+
 </div>
-</div>
+
 
 </div>
 
@@ -650,73 +1042,69 @@ Total P&L
 
 <div class="highlight-grid">
 
-<div class="highlight">
-
-<div class="highlight-title">
-🥇 Highest Win Rate
-</div>
-
-<div
-    class="highlight-name"
-    id="highestWinRate"
->
-—
-</div>
-
-<div
-    class="highlight-value"
-    id="highestWinRateValue"
->
-0%
-</div>
-
-</div>
-
 
 <div class="highlight">
 
-<div class="highlight-title">
-🥇 Most Total Points
-</div>
+    <div class="highlight-title">
+        🥇 Highest Win Rate
+    </div>
 
-<div
-    class="highlight-name"
-    id="highestPoints"
->
-—
-</div>
+    <div
+        class="highlight-name"
+        id="highestWinRate">
+        —
+    </div>
 
-<div
-    class="highlight-value"
-    id="highestPointsValue"
->
-0 points
-</div>
+    <div
+        class="highlight-value"
+        id="highestWinRateValue">
+        0%
+    </div>
 
 </div>
 
 
 <div class="highlight">
 
-<div class="highlight-title">
-🥇 Highest Average Points / Trade
-</div>
+    <div class="highlight-title">
+        🥇 Most Total Points
+    </div>
 
-<div
-    class="highlight-name"
-    id="highestAverage"
->
-—
-</div>
+    <div
+        class="highlight-name"
+        id="highestPoints">
+        —
+    </div>
 
-<div
-    class="highlight-value"
-    id="highestAverageValue"
->
-0 points/trade
-</div>
+    <div
+        class="highlight-value"
+        id="highestPointsValue">
+        0 points
+    </div>
 
 </div>
+
+
+<div class="highlight">
+
+    <div class="highlight-title">
+        🥇 Highest Average Points / Trade
+    </div>
+
+    <div
+        class="highlight-name"
+        id="highestAverage">
+        —
+    </div>
+
+    <div
+        class="highlight-value"
+        id="highestAverageValue">
+        0 points/trade
+    </div>
+
+</div>
+
 
 </div>
 
@@ -728,62 +1116,72 @@ Total P&L
 <div class="section">
 
 <div class="section-title">
-📈 STRATEGY PERFORMANCE CHARTS
+    📈 STRATEGY PERFORMANCE CHARTS
 </div>
+
 
 <div class="chart-grid">
 
 
 <div class="chart-box">
 
-<div class="section-title">
-Win Rate by Strategy
-</div>
+    <div class="section-title">
+        Win Rate by Strategy
+    </div>
 
-<div class="chart-container">
-<canvas id="winRateChart"></canvas>
-</div>
+    <div class="chart-container">
 
-</div>
+        <canvas id="winRateChart"></canvas>
 
-
-<div class="chart-box">
-
-<div class="section-title">
-Total Points by Strategy
-</div>
-
-<div class="chart-container">
-<canvas id="pointsChart"></canvas>
-</div>
+    </div>
 
 </div>
 
 
 <div class="chart-box">
 
-<div class="section-title">
-Trade Results
-</div>
+    <div class="section-title">
+        Total Points by Strategy
+    </div>
 
-<div class="chart-container">
-<canvas id="resultChart"></canvas>
-</div>
+    <div class="chart-container">
+
+        <canvas id="pointsChart"></canvas>
+
+    </div>
 
 </div>
 
 
 <div class="chart-box">
 
-<div class="section-title">
-Strategy Trade Distribution
+    <div class="section-title">
+        Trade Results
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="resultChart"></canvas>
+
+    </div>
+
 </div>
 
-<div class="chart-container">
-<canvas id="distributionChart"></canvas>
-</div>
+
+<div class="chart-box">
+
+    <div class="section-title">
+        Strategy Trade Distribution
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="distributionChart"></canvas>
+
+    </div>
 
 </div>
+
 
 </div>
 
@@ -797,13 +1195,12 @@ Strategy Trade Distribution
 <div class="section">
 
 <div class="section-title">
-📊 ALL 7 STRATEGY PERFORMANCE
+    📊 ALL 7 STRATEGY PERFORMANCE
 </div>
 
 <div
     class="strategy-grid"
-    id="strategyCards"
->
+    id="strategyCards">
 </div>
 
 </div>
@@ -816,8 +1213,9 @@ Strategy Trade Distribution
 <div class="section">
 
 <div class="section-title">
-🏆 STRATEGY RANKING
+    🏆 STRATEGY RANKING
 </div>
+
 
 <div class="table-wrap">
 
@@ -836,11 +1234,12 @@ Strategy Trade Distribution
 <th>LOSSES</th>
 <th>BREAKEVEN</th>
 <th>TOTAL POINTS</th>
-<th>P&L</th>
+<th>P&amp;L</th>
 
 </tr>
 
 </thead>
+
 
 <tbody id="rankingBody">
 </tbody>
@@ -859,8 +1258,9 @@ Strategy Trade Distribution
 <div class="section">
 
 <div class="section-title">
-📝 STRATEGY REMARKS & TRADE DETAILS
+    📝 STRATEGY REMARKS &amp; TRADE DETAILS
 </div>
+
 
 <div class="table-wrap">
 
@@ -874,7 +1274,7 @@ Strategy Trade Distribution
 <th>STRATEGY</th>
 <th>RESULT</th>
 <th>POINTS</th>
-<th>P&L</th>
+<th>P&amp;L</th>
 <th>TRADE REMARKS</th>
 <th>MARKET CONDITION</th>
 <th>TRADE TYPE</th>
@@ -889,6 +1289,7 @@ Strategy Trade Distribution
 
 </thead>
 
+
 <tbody id="tradeDetailsBody">
 </tbody>
 
@@ -900,8 +1301,11 @@ Strategy Trade Distribution
 
 
 <div class="footer">
+
 DISCIPLINE TODAY, FREEDOM TOMORROW.
+
 </div>
+
 
 </div>
 
@@ -966,18 +1370,24 @@ function getCurrentMonth(){
         );
 
     if(stored){
+
         return stored;
+
     }
 
     const now =
         new Date();
 
     return (
-        now.getFullYear()+
-        "-" +
+
+        now.getFullYear()
+        +
+        "-"
+        +
         String(
             now.getMonth()+1
         ).padStart(2,"0")
+
     );
 
 }
@@ -1000,6 +1410,7 @@ document.getElementById(
 function money(n){
 
     return "₹" +
+
         Number(n || 0)
         .toLocaleString(
             "en-IN",
@@ -1024,9 +1435,17 @@ function formatDate(date){
         return date;
 
     return (
-        p[2]+"/"+
-        p[1]+"/"+
+
+        p[2]
+        +
+        "/"
+        +
+        p[1]
+        +
+        "/"
+        +
         p[0]
+
     );
 
 }
@@ -1035,10 +1454,12 @@ function formatDate(date){
 function escapeHTML(text){
 
     return String(
+
         text === undefined ||
         text === null
         ? ""
         : text
+
     )
 
     .replaceAll("&","&amp;")
@@ -1067,7 +1488,7 @@ function clean(value){
 
 
 /* =========================================================
-   GET ALL TRADES FOR MONTH
+   GET MONTHLY TRADES
 ========================================================= */
 
 function getMonthlyTrades(){
@@ -1084,10 +1505,11 @@ function getMonthlyTrades(){
     const days =
         month.days || {};
 
-    const result=[];
+    const result = [];
 
 
     Object.keys(days).forEach(
+
         dayKey=>{
 
             const day =
@@ -1101,18 +1523,12 @@ function getMonthlyTrades(){
 
 
             trades.forEach(
+
                 (trade,index)=>{
 
                     if(!trade)
                         return;
 
-
-                    /*
-                       Only trades with a
-                       selected strategy are
-                       included in strategy
-                       analytics.
-                    */
 
                     if(
                         !clean(
@@ -1129,6 +1545,7 @@ function getMonthlyTrades(){
                         Number(
                             trade.points
                         ) || 0;
+
 
                     const pl =
                         Number(
@@ -1206,9 +1623,11 @@ function getMonthlyTrades(){
                     });
 
                 }
+
             );
 
         }
+
     );
 
 
@@ -1223,13 +1642,14 @@ function getMonthlyTrades(){
 
 function createStrategyData(){
 
-    const data={};
+    const data = {};
 
 
     STRATEGIES.forEach(
+
         strategy=>{
 
-            data[strategy]={
+            data[strategy] = {
 
                 name:
                     strategy,
@@ -1271,10 +1691,48 @@ function createStrategyData(){
             };
 
         }
+
     );
 
 
     return data;
+
+}
+
+
+/* =========================================================
+   AVERAGE
+========================================================= */
+
+function average(arr){
+
+    if(
+        !arr ||
+        !arr.length
+    ){
+
+        return 0;
+
+    }
+
+
+    return (
+
+        arr.reduce(
+
+            (sum,n)=>
+                sum +
+                Number(n || 0),
+
+            0
+
+        )
+
+        /
+
+        arr.length
+
+    );
 
 }
 
@@ -1293,13 +1751,8 @@ function buildAnalytics(){
 
 
     trades.forEach(
-        trade=>{
 
-            /*
-               If an unknown old strategy
-               exists in storage, include it
-               rather than losing the data.
-            */
+        trade=>{
 
             if(
                 !strategies[
@@ -1309,7 +1762,7 @@ function buildAnalytics(){
 
                 strategies[
                     trade.strategy
-                ]={
+                ] = {
 
                     name:
                         trade.strategy,
@@ -1361,8 +1814,10 @@ function buildAnalytics(){
 
             s.trades++;
 
+
             s.points +=
                 trade.points;
+
 
             s.pl +=
                 trade.pl;
@@ -1377,6 +1832,7 @@ function buildAnalytics(){
                 );
 
             }
+
             else if(trade.pl < 0){
 
                 s.losses++;
@@ -1386,6 +1842,7 @@ function buildAnalytics(){
                 );
 
             }
+
             else{
 
                 s.breakeven++;
@@ -1439,44 +1896,54 @@ function buildAnalytics(){
                 );
 
         }
+
     );
 
 
     Object.values(
         strategies
     ).forEach(
+
         s=>{
 
             s.winRate =
                 s.trades
-                ? (
+                ?
+                (
                     s.wins /
                     s.trades
                 ) * 100
-                : 0;
+                :
+                0;
 
 
             s.avgPoints =
                 s.trades
-                ? s.points /
-                  s.trades
-                : 0;
+                ?
+                s.points /
+                s.trades
+                :
+                0;
 
 
             s.avgWinPoints =
                 s.winPoints.length
-                ? average(
+                ?
+                average(
                     s.winPoints
                 )
-                : 0;
+                :
+                0;
 
 
             s.avgLossPoints =
                 s.lossPoints.length
-                ? average(
+                ?
+                average(
                     s.lossPoints
                 )
-                : 0;
+                :
+                0;
 
 
             s.avgSetup =
@@ -1497,6 +1964,7 @@ function buildAnalytics(){
                 );
 
         }
+
     );
 
 
@@ -1514,36 +1982,7 @@ function buildAnalytics(){
 
 
 /* =========================================================
-   AVERAGE
-========================================================= */
-
-function average(arr){
-
-    if(
-        !arr ||
-        !arr.length
-    ){
-
-        return 0;
-
-    }
-
-    return (
-        arr.reduce(
-            (sum,n)=>
-                sum+
-                Number(n || 0),
-            0
-        )
-        /
-        arr.length
-    );
-
-}
-
-
-/* =========================================================
-   MAIN SUMMARY
+   SUMMARY
 ========================================================= */
 
 function renderSummary(data){
@@ -1600,9 +2039,11 @@ function renderSummary(data){
 
     const avgPoints =
         trades.length
-        ? totalPoints/
-          trades.length
-        : 0;
+        ?
+        totalPoints /
+        trades.length
+        :
+        0;
 
 
     const avgWinPoints =
@@ -1619,11 +2060,13 @@ function renderSummary(data){
 
     const winRate =
         trades.length
-        ? (
-            wins/
+        ?
+        (
+            wins /
             trades.length
-        )*100
-        : 0;
+        ) * 100
+        :
+        0;
 
 
     document.getElementById(
@@ -1695,7 +2138,7 @@ function renderSummary(data){
 
 
 /* =========================================================
-   HIGHLIGHT RANKINGS
+   HIGHLIGHTS
 ========================================================= */
 
 function renderHighlights(data){
@@ -1716,12 +2159,25 @@ function renderHighlights(data){
         ).textContent="—";
 
         document.getElementById(
+            "highestWinRateValue"
+        ).textContent="0%";
+
+        document.getElementById(
             "highestPoints"
         ).textContent="—";
 
         document.getElementById(
+            "highestPointsValue"
+        ).textContent="0 points";
+
+        document.getElementById(
             "highestAverage"
         ).textContent="—";
+
+        document.getElementById(
+            "highestAverageValue"
+        ).textContent=
+            "0 points/trade";
 
         return;
 
@@ -1731,7 +2187,7 @@ function renderHighlights(data){
     const winRate =
         [...list].sort(
             (a,b)=>
-                b.winRate-
+                b.winRate -
                 a.winRate
         )[0];
 
@@ -1739,7 +2195,7 @@ function renderHighlights(data){
     const points =
         [...list].sort(
             (a,b)=>
-                b.points-
+                b.points -
                 a.points
         )[0];
 
@@ -1747,7 +2203,7 @@ function renderHighlights(data){
     const averagePoints =
         [...list].sort(
             (a,b)=>
-                b.avgPoints-
+                b.avgPoints -
                 a.avgPoints
         )[0];
 
@@ -1795,6 +2251,27 @@ function renderHighlights(data){
 
 
 /* =========================================================
+   UNIQUE JOIN
+========================================================= */
+
+function uniqueJoin(arr){
+
+    return [
+
+        ...new Set(
+
+            arr.filter(
+                x=>clean(x)
+            )
+
+        )
+
+    ].join(", ");
+
+}
+
+
+/* =========================================================
    STRATEGY CARDS
 ========================================================= */
 
@@ -1810,6 +2287,7 @@ function renderStrategyCards(data){
 
 
     STRATEGIES.forEach(
+
         strategy=>{
 
             const s =
@@ -1823,16 +2301,19 @@ function renderStrategyCards(data){
                     "div"
                 );
 
-            card.className=
+
+            card.className =
                 "strategy-card";
 
 
             const latestRemarks =
                 s.remarks.length
-                ? s.remarks
+                ?
+                s.remarks
                     .slice(-3)
                     .join(" | ")
-                : "";
+                :
+                "";
 
 
             const markets =
@@ -1865,217 +2346,299 @@ function renderStrategyCards(data){
                 );
 
 
-            card.innerHTML=`
+            card.innerHTML = `
 
 <div class="strategy-card-head">
 
-<div class="strategy-name">
-${escapeHTML(s.name)}
-</div>
+    <div class="strategy-name">
+        ${escapeHTML(s.name)}
+    </div>
 
-<div class="strategy-rate">
-${s.winRate.toFixed(1)}%
-</div>
+    <div class="strategy-rate">
+        ${s.winRate.toFixed(1)}%
+    </div>
 
 </div>
 
 
 <div class="stats-grid">
 
-<div class="stat">
-<div class="stat-label">
-TRADES
-</div>
-<div class="stat-value">
-${s.trades}
-</div>
-</div>
-
 
 <div class="stat">
-<div class="stat-label">
-WINS
-</div>
-<div class="stat-value">
-${s.wins}
-</div>
+
+    <div class="stat-label">
+        TRADES
+    </div>
+
+    <div class="stat-value">
+        ${s.trades}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-LOSSES
-</div>
-<div class="stat-value">
-${s.losses}
-</div>
+
+    <div class="stat-label">
+        WINS
+    </div>
+
+    <div class="stat-value">
+        ${s.wins}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-BREAKEVEN
-</div>
-<div class="stat-value">
-${s.breakeven}
-</div>
+
+    <div class="stat-label">
+        LOSSES
+    </div>
+
+    <div class="stat-value">
+        ${s.losses}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG POINTS
-</div>
-<div class="stat-value">
-${s.avgPoints.toFixed(2)}
-</div>
+
+    <div class="stat-label">
+        BREAKEVEN
+    </div>
+
+    <div class="stat-value">
+        ${s.breakeven}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-TOTAL POINTS
-</div>
-<div class="stat-value">
-${s.points.toFixed(2)}
-</div>
+
+    <div class="stat-label">
+        AVG POINTS
+    </div>
+
+    <div class="stat-value">
+        ${s.avgPoints.toFixed(2)}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG WIN
-</div>
-<div class="stat-value">
-${s.avgWinPoints.toFixed(2)}
-</div>
+
+    <div class="stat-label">
+        TOTAL POINTS
+    </div>
+
+    <div class="stat-value">
+        ${s.points.toFixed(2)}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG LOSS
-</div>
-<div class="stat-value">
-${s.avgLossPoints.toFixed(2)}
-</div>
+
+    <div class="stat-label">
+        AVG WIN
+    </div>
+
+    <div class="stat-value">
+        ${s.avgWinPoints.toFixed(2)}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-TOTAL P&L
-</div>
-<div class="stat-value">
-${money(s.pl)}
-</div>
+
+    <div class="stat-label">
+        AVG LOSS
+    </div>
+
+    <div class="stat-value">
+        ${s.avgLossPoints.toFixed(2)}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG SETUP
-</div>
-<div class="stat-value">
-${s.avgSetup.toFixed(2)}/5
-</div>
+
+    <div class="stat-label">
+        TOTAL P&amp;L
+    </div>
+
+    <div class="stat-value">
+        ${money(s.pl)}
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG DISCIPLINE
-</div>
-<div class="stat-value">
-${s.avgDiscipline.toFixed(2)}/5
-</div>
+
+    <div class="stat-label">
+        AVG SETUP
+    </div>
+
+    <div class="stat-value">
+        ${s.avgSetup.toFixed(2)}/5
+    </div>
+
 </div>
 
 
 <div class="stat">
-<div class="stat-label">
-AVG CONFIDENCE
+
+    <div class="stat-label">
+        AVG DISCIPLINE
+    </div>
+
+    <div class="stat-value">
+        ${s.avgDiscipline.toFixed(2)}/5
+    </div>
+
 </div>
-<div class="stat-value">
-${s.avgConfidence.toFixed(2)}/5
+
+
+<div class="stat">
+
+    <div class="stat-label">
+        AVG CONFIDENCE
+    </div>
+
+    <div class="stat-value">
+        ${s.avgConfidence.toFixed(2)}/5
+    </div>
+
 </div>
-</div>
+
 
 </div>
 
 
 <div class="strategy-extra">
 
-<div class="detail-line">
-<div class="detail-label">
-MARKET CONDITION
-</div>
-<div class="detail-value">
-${escapeHTML(
-    markets
-) || '<span class="empty">No data</span>'}
-</div>
-</div>
-
 
 <div class="detail-line">
-<div class="detail-label">
-TRADE TYPE
-</div>
-<div class="detail-value">
-${escapeHTML(
-    types
-) || '<span class="empty">No data</span>'}
-</div>
+
+    <div class="detail-label">
+        MARKET CONDITION
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(markets)
+            ||
+            '<span class="empty">No data</span>'
+        }
+
+    </div>
+
 </div>
 
 
 <div class="detail-line">
-<div class="detail-label">
-TIMEFRAME
-</div>
-<div class="detail-value">
-${escapeHTML(
-    timeframes
-) || '<span class="empty">No data</span>'}
-</div>
+
+    <div class="detail-label">
+        TRADE TYPE
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(types)
+            ||
+            '<span class="empty">No data</span>'
+        }
+
+    </div>
+
 </div>
 
 
 <div class="detail-line">
-<div class="detail-label">
-HTF TREND
-</div>
-<div class="detail-value">
-${escapeHTML(
-    trends
-) || '<span class="empty">No data</span>'}
-</div>
+
+    <div class="detail-label">
+        TIMEFRAME
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(timeframes)
+            ||
+            '<span class="empty">No data</span>'
+        }
+
+    </div>
+
 </div>
 
 
 <div class="detail-line">
-<div class="detail-label">
-NEWS IMPACT
-</div>
-<div class="detail-value">
-${escapeHTML(
-    news
-) || '<span class="empty">No data</span>'}
-</div>
+
+    <div class="detail-label">
+        HTF TREND
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(trends)
+            ||
+            '<span class="empty">No data</span>'
+        }
+
+    </div>
+
 </div>
 
 
 <div class="detail-line">
-<div class="detail-label">
-TRADE REMARKS
+
+    <div class="detail-label">
+        NEWS IMPACT
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(news)
+            ||
+            '<span class="empty">No data</span>'
+        }
+
+    </div>
+
 </div>
-<div class="detail-value">
-${escapeHTML(
-    latestRemarks
-) || '<span class="empty">No remarks</span>'}
+
+
+<div class="detail-line">
+
+    <div class="detail-label">
+        TRADE REMARKS
+    </div>
+
+    <div class="detail-value">
+
+        ${
+            escapeHTML(latestRemarks)
+            ||
+            '<span class="empty">No remarks</span>'
+        }
+
+    </div>
+
 </div>
-</div>
+
 
 </div>
 
@@ -2087,24 +2650,8 @@ ${escapeHTML(
             );
 
         }
+
     );
-
-}
-
-
-/* =========================================================
-   UNIQUE JOIN
-========================================================= */
-
-function uniqueJoin(arr){
-
-    return [
-        ...new Set(
-            arr.filter(
-                x=>clean(x)
-            )
-        )
-    ].join(", ");
 
 }
 
@@ -2130,12 +2677,13 @@ function renderRanking(data){
         )
         .sort(
             (a,b)=>
-                b.winRate-
+                b.winRate -
                 a.winRate
         );
 
 
     list.forEach(
+
         (s,index)=>{
 
             const row =
@@ -2144,46 +2692,46 @@ function renderRanking(data){
                 );
 
 
-            row.innerHTML=`
+            row.innerHTML = `
 
 <td class="rank">
-${index+1}
+    ${index+1}
 </td>
 
 <td>
-${escapeHTML(s.name)}
+    ${escapeHTML(s.name)}
 </td>
 
 <td>
-${s.winRate.toFixed(2)}%
+    ${s.winRate.toFixed(2)}%
 </td>
 
 <td>
-${s.avgPoints.toFixed(2)}
+    ${s.avgPoints.toFixed(2)}
 </td>
 
 <td>
-${s.trades}
+    ${s.trades}
 </td>
 
 <td>
-${s.wins}
+    ${s.wins}
 </td>
 
 <td>
-${s.losses}
+    ${s.losses}
 </td>
 
 <td>
-${s.breakeven}
+    ${s.breakeven}
 </td>
 
 <td>
-${s.points.toFixed(2)}
+    ${s.points.toFixed(2)}
 </td>
 
 <td>
-${money(s.pl)}
+    ${money(s.pl)}
 </td>
 
 `;
@@ -2194,6 +2742,7 @@ ${money(s.pl)}
             );
 
         }
+
     );
 
 }
@@ -2217,16 +2766,23 @@ function renderTradeDetails(data){
     const trades =
         [...data.trades]
         .sort(
+
             (a,b)=>
+
                 a.date.localeCompare(
                     b.date
-                ) ||
-                a.tradeNumber-
+                )
+
+                ||
+
+                a.tradeNumber -
                 b.tradeNumber
+
         );
 
 
     trades.forEach(
+
         trade=>{
 
             let result="";
@@ -2239,12 +2795,14 @@ function renderTradeDetails(data){
                 className="win";
 
             }
+
             else if(trade.pl<0){
 
                 result="LOSS";
                 className="loss";
 
             }
+
             else{
 
                 result="NO RESULT";
@@ -2259,80 +2817,92 @@ function renderTradeDetails(data){
                 );
 
 
-            row.innerHTML=`
+            row.innerHTML = `
 
 <td>
-${formatDate(trade.date)}
+    ${formatDate(trade.date)}
 </td>
 
 <td>
-<strong>
-${escapeHTML(
-    trade.strategy
-)}
-</strong>
+    <strong>
+        ${escapeHTML(trade.strategy)}
+    </strong>
 </td>
 
 <td>
-<span class="badge ${className}">
-${result}
-</span>
+
+    <span class="badge ${className}">
+        ${result}
+    </span>
+
 </td>
 
 <td>
-${trade.points.toFixed(2)}
+    ${trade.points.toFixed(2)}
 </td>
 
 <td>
-${money(trade.pl)}
+    ${money(trade.pl)}
 </td>
 
 <td>
-${escapeHTML(
-    trade.remarks
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.remarks)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${escapeHTML(
-    trade.market
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.market)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${escapeHTML(
-    trade.type
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.type)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${escapeHTML(
-    trade.timeframe
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.timeframe)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${escapeHTML(
-    trade.trend
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.trend)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${escapeHTML(
-    trade.news
-) || '<span class="empty">—</span>'}
+    ${
+        escapeHTML(trade.news)
+        ||
+        '<span class="empty">—</span>'
+    }
 </td>
 
 <td>
-${trade.setup || "—"}/5
+    ${trade.setup || "—"}/5
 </td>
 
 <td>
-${trade.discipline || "—"}/5
+    ${trade.discipline || "—"}/5
 </td>
 
 <td>
-${trade.confidence || "—"}/5
+    ${trade.confidence || "—"}/5
 </td>
 
 `;
@@ -2343,12 +2913,13 @@ ${trade.confidence || "—"}/5
             );
 
         }
+
     );
 
 
     if(!trades.length){
 
-        body.innerHTML=`
+        body.innerHTML = `
 
 <tr>
 
@@ -2360,8 +2931,10 @@ ${trade.confidence || "—"}/5
         color:#888;
     "
 >
+
 No strategy trades found for
 ${escapeHTML(selectedMonth)}.
+
 </td>
 
 </tr>
@@ -2377,10 +2950,13 @@ ${escapeHTML(selectedMonth)}.
    CHART VARIABLES
 ========================================================= */
 
-let winRateChart=null;
-let pointsChart=null;
-let resultChart=null;
-let distributionChart=null;
+let winRateChart = null;
+
+let pointsChart = null;
+
+let resultChart = null;
+
+let distributionChart = null;
 
 
 /* =========================================================
@@ -2427,10 +3003,12 @@ function renderCharts(data){
 
     const strategyData =
         STRATEGIES.map(
+
             strategy=>
                 data.strategies[
                     strategy
                 ]
+
         );
 
 
@@ -2439,10 +3017,13 @@ function renderCharts(data){
     ===================================================== */
 
     winRateChart =
+
         new Chart(
+
             document.getElementById(
                 "winRateChart"
             ),
+
             {
 
                 type:"bar",
@@ -2457,12 +3038,15 @@ function renderCharts(data){
                             "Win Rate %",
 
                         data:
+
                             strategyData.map(
+
                                 s=>
                                     Number(
                                         s.winRate
-                                    .toFixed(2)
-                                )
+                                        .toFixed(2)
+                                    )
+
                             )
 
                     }]
@@ -2506,6 +3090,7 @@ function renderCharts(data){
                 }
 
             }
+
         );
 
 
@@ -2514,10 +3099,13 @@ function renderCharts(data){
     ===================================================== */
 
     pointsChart =
+
         new Chart(
+
             document.getElementById(
                 "pointsChart"
             ),
+
             {
 
                 type:"bar",
@@ -2532,12 +3120,15 @@ function renderCharts(data){
                             "Total Points",
 
                         data:
+
                             strategyData.map(
+
                                 s=>
                                     Number(
                                         s.points
-                                    .toFixed(2)
-                                )
+                                        .toFixed(2)
+                                    )
+
                             )
 
                     }]
@@ -2561,6 +3152,7 @@ function renderCharts(data){
                 }
 
             }
+
         );
 
 
@@ -2591,10 +3183,13 @@ function renderCharts(data){
 
 
     resultChart =
+
         new Chart(
+
             document.getElementById(
                 "resultChart"
             ),
+
             {
 
                 type:"doughnut",
@@ -2636,7 +3231,10 @@ function renderCharts(data){
                     plugins:{
 
                         legend:{
-                            position:"bottom"
+
+                            position:
+                                "bottom"
+
                         }
 
                     }
@@ -2653,10 +3251,13 @@ function renderCharts(data){
     ===================================================== */
 
     distributionChart =
+
         new Chart(
+
             document.getElementById(
                 "distributionChart"
             ),
+
             {
 
                 type:"doughnut",
@@ -2668,9 +3269,9 @@ function renderCharts(data){
                     datasets:[{
 
                         data:
+
                             strategyData.map(
-                                s=>
-                                    s.trades
+                                s=>s.trades
                             )
 
                     }]
@@ -2686,7 +3287,10 @@ function renderCharts(data){
                     plugins:{
 
                         legend:{
-                            position:"bottom"
+
+                            position:
+                                "bottom"
+
                         }
 
                     }
@@ -2714,7 +3318,7 @@ function updateMonthTitle(){
 
         document.getElementById(
             "monthTitle"
-        ).textContent=
+        ).textContent =
             "Trading Data";
 
         return;
@@ -2725,16 +3329,27 @@ function updateMonthTitle(){
     const names=[
 
         "January",
+
         "February",
+
         "March",
+
         "April",
+
         "May",
+
         "June",
+
         "July",
+
         "August",
+
         "September",
+
         "October",
+
         "November",
+
         "December"
 
     ];
@@ -2743,18 +3358,22 @@ function updateMonthTitle(){
     document.getElementById(
         "monthTitle"
     ).textContent =
+
         names[
             Number(parts[1])-1
-        ]+
-        " "+
-        parts[0]+
-        " • Strategy Analytics";
+        ]
+
+        +" "
+
+        +parts[0]
+
+        +" • Strategy Analytics";
 
 }
 
 
 /* =========================================================
-   REFRESH DASHBOARD
+   REFRESH
 ========================================================= */
 
 function refreshDashboard(){
@@ -2805,7 +3424,9 @@ function refreshDashboard(){
 document.getElementById(
     "dashboardMonth"
 ).addEventListener(
+
     "change",
+
     function(){
 
         if(!this.value)
@@ -2817,14 +3438,18 @@ document.getElementById(
 
 
         localStorage.setItem(
+
             "selectedTradingMonth",
+
             selectedMonth
+
         );
 
 
         refreshDashboard();
 
     }
+
 );
 
 
@@ -2834,13 +3459,6 @@ document.getElementById(
 
 function backToDaily(){
 
-    /*
-       If this dashboard is inside
-       the iframe of the main journal,
-       ask the parent page to show
-       the daily journal.
-    */
-
     try{
 
         if(
@@ -2849,11 +3467,14 @@ function backToDaily(){
         ){
 
             window.parent.postMessage(
+
                 {
                     type:
                         "BACK_TO_DAILY_JOURNAL"
                 },
+
                 "*"
+
             );
 
             return;
@@ -2862,11 +3483,6 @@ function backToDaily(){
 
     }catch(error){}
 
-
-    /*
-       If strategy.html is opened
-       directly, try going back.
-    */
 
     if(
         document.referrer
@@ -2884,7 +3500,9 @@ function backToDaily(){
 ========================================================= */
 
 window.addEventListener(
+
     "message",
+
     function(event){
 
         if(!event.data)
@@ -2892,14 +3510,20 @@ window.addEventListener(
 
 
         if(
-            event.data.type ===
-            "TRADING_JOURNAL_REFRESH" ||
 
             event.data.type ===
-            "TRADING_JOURNAL_UPDATED" ||
+            "TRADING_JOURNAL_REFRESH"
+
+            ||
+
+            event.data.type ===
+            "TRADING_JOURNAL_UPDATED"
+
+            ||
 
             event.data.type ===
             "TRADING_JOURNAL_MONTH_CHANGED"
+
         ){
 
             const storedMonth =
@@ -2912,6 +3536,7 @@ window.addEventListener(
 
                 selectedMonth =
                     storedMonth;
+
 
                 document.getElementById(
                     "dashboardMonth"
@@ -2926,6 +3551,7 @@ window.addEventListener(
         }
 
     }
+
 );
 
 
@@ -2934,7 +3560,9 @@ window.addEventListener(
 ========================================================= */
 
 window.addEventListener(
+
     "storage",
+
     function(event){
 
         if(
@@ -2957,10 +3585,12 @@ window.addEventListener(
                 selectedMonth =
                     event.newValue;
 
+
                 document.getElementById(
                     "dashboardMonth"
                 ).value =
                     selectedMonth;
+
 
                 refreshDashboard();
 
@@ -2969,297 +3599,103 @@ window.addEventListener(
         }
 
     }
+
 );
 
 
 /* =========================================================
-   SAVE FULL DASHBOARD AS PDF
+   SAVE AS PDF
 ========================================================= */
 
-async function saveDashboardPDF(){
-
-    const dashboard =
-        document.querySelector(
-            ".dashboard"
-        );
-
-    if(!dashboard)
-        return;
-
+function saveDashboardPDF(){
 
     const button =
-        event &&
-        event.target
-        ? event.target
-        : null;
+        document.getElementById(
+            "pdfButton"
+        );
 
 
     const originalText =
-        button
-        ? button.textContent
-        : "SAVE PDF";
+        button.textContent;
 
 
-    if(button){
+    button.textContent =
+        "OPENING PDF...";
 
-        button.textContent =
-            "CREATING PDF...";
 
-        button.disabled = true;
+    button.disabled =
+        true;
 
-    }
 
+    /*
+       Small delay allows Chart.js
+       to finish rendering.
+    */
 
-    try{
+    setTimeout(
 
-        /*
-           Wait for charts and page rendering
-           to finish before taking the screenshot.
-        */
+        function(){
 
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    500
-                )
-        );
+            /*
+               Set a useful document title.
+               Android/Chrome will use this
+               as the suggested PDF filename.
+            */
 
+            const oldTitle =
+                document.title;
 
-        /*
-           Capture the COMPLETE dashboard
-           visually.
 
-           This includes:
-           - Header
-           - KPI cards
-           - Ranking cards
-           - Chart.js charts
-           - Strategy cards
-           - Ranking table
-           - Trade detail table
-           - Footer
-           - Backgrounds
-           - Borders
-           - Shadows
-           - Text
-        */
-
-        const canvas =
-            await html2canvas(
-                dashboard,
-                {
-
-                    scale:2,
-
-                    useCORS:true,
-
-                    allowTaint:true,
-
-                    backgroundColor:
-                        "#eef0f3",
-
-                    logging:false,
-
-                    windowWidth:
-                        dashboard.scrollWidth,
-
-                    windowHeight:
-                        dashboard.scrollHeight,
-
-                    scrollX:0,
-
-                    scrollY:0
-
-                }
-            );
-
-
-        const imgData =
-            canvas.toDataURL(
-                "image/jpeg",
-                0.95
-            );
-
-
-        /*
-           Landscape A4 PDF.
-           The complete dashboard image is
-           scaled to the PDF width and split
-           vertically across multiple pages.
-        */
-
-        const {
-            jsPDF
-        } = window.jspdf;
-
-
-        const pdf =
-            new jsPDF(
-                {
-
-                    orientation:
-                        "landscape",
-
-                    unit:
-                        "mm",
-
-                    format:
-                        "a4",
-
-                    compress:
-                        true
-
-                }
-            );
-
-
-        const pageWidth =
-            pdf.internal.pageSize.getWidth();
-
-
-        const pageHeight =
-            pdf.internal.pageSize.getHeight();
-
-
-        const margin =
-            5;
-
-
-        const usableWidth =
-            pageWidth -
-            (margin*2);
-
-
-        const imageWidth =
-            canvas.width;
-
-
-        const imageHeight =
-            canvas.height;
-
-
-        const scale =
-            usableWidth /
-            imageWidth;
-
-
-        const scaledHeight =
-            imageHeight *
-            scale;
-
-
-        let heightLeft =
-            scaledHeight;
-
-
-        let position =
-            margin;
-
-
-        /*
-           First page
-        */
-
-        pdf.addImage(
-            imgData,
-            "JPEG",
-            margin,
-            position,
-            usableWidth,
-            scaledHeight,
-            undefined,
-            "FAST"
-        );
-
-
-        heightLeft -=
-            pageHeight -
-            margin -
-            margin;
-
-
-        /*
-           Additional pages
-        */
-
-        while(
-            heightLeft > 0
-        ){
-
-            position =
-                margin -
-                (
-                    scaledHeight -
-                    heightLeft
+            const safeMonth =
+                selectedMonth.replace(
+                    /[^0-9-]/g,
+                    ""
                 );
 
 
-            pdf.addPage();
+            document.title =
+                "Strategy Accuracy Dashboard - "
+                +
+                safeMonth;
 
 
-            pdf.addImage(
-                imgData,
-                "JPEG",
-                margin,
-                position,
-                usableWidth,
-                scaledHeight,
-                undefined,
-                "FAST"
+            /*
+               Open the native browser
+               print / Save as PDF screen.
+            */
+
+            window.print();
+
+
+            /*
+               Restore title/button after
+               print dialog closes.
+            */
+
+            setTimeout(
+
+                function(){
+
+                    document.title =
+                        oldTitle;
+
+                    button.textContent =
+                        originalText;
+
+                    button.disabled =
+                        false;
+
+                },
+
+                1000
+
             );
 
+        },
 
-            heightLeft -=
-                pageHeight -
-                margin -
-                margin;
+        300
 
-        }
-
-
-        /*
-           File name
-        */
-
-        const safeMonth =
-            selectedMonth
-            .replace(
-                /[^0-9-]/g,
-                ""
-            );
-
-
-        pdf.save(
-            "Strategy-Accuracy-Dashboard-" +
-            safeMonth +
-            ".pdf"
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "PDF creation error:",
-            error
-        );
-
-
-        alert(
-            "Unable to create PDF. Please try again."
-        );
-
-    }
-
-
-    if(button){
-
-        button.textContent =
-            originalText;
-
-        button.disabled = false;
-
-    }
+    );
 
 }
 
@@ -3273,4 +3709,5 @@ refreshDashboard();
 </script>
 
 </body>
+
 </html>
