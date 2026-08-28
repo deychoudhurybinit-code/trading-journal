@@ -601,6 +601,26 @@ select{
         );
 }
 
+
+/* =========================================================
+   STRATEGY PAGE
+========================================================= */
+
+.strategy-frame-page{
+    padding:0;
+    overflow:hidden;
+    background:white;
+}
+
+.strategy-frame{
+    width:100%;
+    min-height:1200px;
+    border:0;
+    display:block;
+    background:white;
+}
+
+
 .footer{
     text-align:center;
     font-weight:bold;
@@ -655,6 +675,10 @@ select{
         page-break-after:always;
     }
 
+    .strategy-frame{
+        min-height:0;
+    }
+
     @page{
         size:A4 portrait;
         margin:7mm;
@@ -684,6 +708,10 @@ DAILY JOURNAL
 
 <button onclick="showMonthly()">
 MONTHLY JOURNAL
+</button>
+
+<button onclick="showStrategy()">
+STRATEGY DASHBOARD
 </button>
 
 <button onclick="window.print()">
@@ -1472,7 +1500,9 @@ CLEAR
 </div>
 
 
-<!-- MONTHLY -->
+<!-- =========================================================
+     MONTHLY JOURNAL
+========================================================= -->
 
 <div
     class="page"
@@ -1722,6 +1752,28 @@ DISCIPLINE TODAY, FREEDOM TOMORROW.
 </div>
 
 </div>
+
+
+<!-- =========================================================
+     STRATEGY DASHBOARD
+     
+     This does NOT create another storage.
+     strategy.html reads:
+     
+     localStorage.getItem("tradingJournal")
+========================================================= -->
+
+<div
+    class="page strategy-frame-page"
+    id="strategyPage"
+    style="display:none"
+>
+
+<iframe
+    class="strategy-frame"
+    src="strategy.html"
+    title="Strategy Dashboard"
+></iframe>
 
 </div>
 
@@ -2016,11 +2068,6 @@ function calculateTrade(n){
         points*qty;
 
 
-    /*
-       Automatically put calculated
-       values into the form.
-    */
-
     if(
         entry !== 0 &&
         exit !== 0
@@ -2189,10 +2236,6 @@ function getActiveTrades(trades){
 
 function calculateDaily(){
 
-    /*
-       First calculate all three trades.
-    */
-
     calculateTrade(1);
     calculateTrade(2);
     calculateTrade(3);
@@ -2229,10 +2272,6 @@ function calculateDaily(){
 
     }
 
-
-    /*
-       Summary after each trade.
-    */
 
     for(
         let i=0;
@@ -2463,10 +2502,6 @@ function getStartingCapital(day){
 
 function saveDay(){
 
-    /*
-       Calculate before saving.
-    */
-
     calculateTrade(1);
     calculateTrade(2);
     calculateTrade(3);
@@ -2551,6 +2586,31 @@ function saveDay(){
     calculateDaily();
 
     renderMonthly();
+
+
+    /*
+       If strategy.html is already loaded
+       inside the iframe, ask it to refresh.
+    */
+
+    const frame=
+        document.querySelector(
+            ".strategy-frame"
+        );
+
+    if(
+        frame &&
+        frame.contentWindow
+    ){
+
+        frame.contentWindow.postMessage(
+            {
+                type:"TRADING_JOURNAL_UPDATED"
+            },
+            "*"
+        );
+
+    }
 
 
     alert(
@@ -3049,6 +3109,29 @@ document.getElementById(
         loadDay(1);
 
         renderMonthly();
+
+        /*
+           Refresh strategy dashboard if loaded.
+        */
+
+        const frame=
+            document.querySelector(
+                ".strategy-frame"
+            );
+
+        if(
+            frame &&
+            frame.contentWindow
+        ){
+
+            frame.contentWindow.postMessage(
+                {
+                    type:"TRADING_JOURNAL_MONTH_CHANGED"
+                },
+                "*"
+            );
+
+        }
 
     }
 );
@@ -3721,6 +3804,10 @@ function showDaily(){
         "monthlyPage"
     ).style.display="none";
 
+    document.getElementById(
+        "strategyPage"
+    ).style.display="none";
+
 }
 
 
@@ -3735,6 +3822,55 @@ function showMonthly(){
     document.getElementById(
         "monthlyPage"
     ).style.display="block";
+
+    document.getElementById(
+        "strategyPage"
+    ).style.display="none";
+
+}
+
+
+function showStrategy(){
+
+    /*
+       Make sure the other pages are hidden.
+    */
+
+    document.getElementById(
+        "dailyPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "monthlyPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "strategyPage"
+    ).style.display="block";
+
+
+    /*
+       Refresh strategy.html.
+
+       It will read the same
+       tradingJournal localStorage.
+    */
+
+    const frame=
+        document.querySelector(
+            ".strategy-frame"
+        );
+
+    if(frame){
+
+        frame.contentWindow.postMessage(
+            {
+                type:"TRADING_JOURNAL_REFRESH"
+            },
+            "*"
+        );
+
+    }
 
 }
 
@@ -3769,6 +3905,26 @@ function deleteMonth(){
     clearDayForm(false);
 
     renderMonthly();
+
+
+    const frame=
+        document.querySelector(
+            ".strategy-frame"
+        );
+
+    if(
+        frame &&
+        frame.contentWindow
+    ){
+
+        frame.contentWindow.postMessage(
+            {
+                type:"TRADING_JOURNAL_UPDATED"
+            },
+            "*"
+        );
+
+    }
 
 }
 
