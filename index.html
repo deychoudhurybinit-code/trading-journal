@@ -253,6 +253,17 @@ select{
     font-size:12px;
 }
 
+.trade-cell select{
+    width:100%;
+    border:0;
+    border-bottom:1px solid #777;
+    outline:none;
+    text-align:center;
+    padding:4px;
+    font-size:12px;
+    background:white;
+}
+
 .trade-lower{
     display:grid;
     grid-template-columns:1fr 1.05fr 1.05fr;
@@ -834,7 +845,16 @@ CONFIDENCE (1-5):
 
 <div class="trade-cell">
 <label>STRATEGY</label>
-<input id="t1_strategy">
+<select id="t1_strategy">
+<option value="">Select Strategy</option>
+<option value="Moving Average">Moving Average</option>
+<option value="TD Resistance">TD Resistance</option>
+<option value="TD Breakout">TD Breakout</option>
+<option value="Pattern">Pattern</option>
+<option value="Choppy / Box">Choppy / Box</option>
+<option value="PE Resistance / CE Support">PE Resistance / CE Support</option>
+<option value="Candlestick Pattern">Candlestick Pattern</option>
+</select>
 </div>
 
 <div class="trade-cell">
@@ -1039,7 +1059,16 @@ CONFIDENCE (1-5):
 
 <div class="trade-cell">
 <label>STRATEGY</label>
-<input id="t2_strategy">
+<select id="t2_strategy">
+<option value="">Select Strategy</option>
+<option value="Moving Average">Moving Average</option>
+<option value="TD Resistance">TD Resistance</option>
+<option value="TD Breakout">TD Breakout</option>
+<option value="Pattern">Pattern</option>
+<option value="Choppy / Box">Choppy / Box</option>
+<option value="PE Resistance / CE Support">PE Resistance / CE Support</option>
+<option value="Candlestick Pattern">Candlestick Pattern</option>
+</select>
 </div>
 
 <div class="trade-cell">
@@ -1244,7 +1273,16 @@ CONFIDENCE (1-5):
 
 <div class="trade-cell">
 <label>STRATEGY</label>
-<input id="t3_strategy">
+<select id="t3_strategy">
+<option value="">Select Strategy</option>
+<option value="Moving Average">Moving Average</option>
+<option value="TD Resistance">TD Resistance</option>
+<option value="TD Breakout">TD Breakout</option>
+<option value="Pattern">Pattern</option>
+<option value="Choppy / Box">Choppy / Box</option>
+<option value="PE Resistance / CE Support">PE Resistance / CE Support</option>
+<option value="Candlestick Pattern">Candlestick Pattern</option>
+</select>
 </div>
 
 <div class="trade-cell">
