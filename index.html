@@ -1757,10 +1757,8 @@ DISCIPLINE TODAY, FREEDOM TOMORROW.
 <!-- =========================================================
      STRATEGY DASHBOARD
      
-     This does NOT create another storage.
-     strategy.html reads:
-     
-     localStorage.getItem("tradingJournal")
+     Reads the same localStorage:
+     tradingJournal
 ========================================================= -->
 
 <div
@@ -1771,7 +1769,7 @@ DISCIPLINE TODAY, FREEDOM TOMORROW.
 
 <iframe
     class="strategy-frame"
-    src="strategy.html"
+    src="strategy.html?v=2"
     title="Strategy Dashboard"
 ></iframe>
 
@@ -2032,19 +2030,6 @@ function calculateTrade(n){
         ) || 0;
 
 
-    /*
-       EXIT - ENTRY
-
-       Example:
-       Entry 100
-       Exit 120
-       = +20 points
-
-       Entry 100
-       Exit 90
-       = -10 points
-    */
-
     let points=0;
 
     if(
@@ -2057,12 +2042,6 @@ function calculateTrade(n){
 
     }
 
-
-    /*
-       NET P&L
-
-       Points × Quantity
-    */
 
     const pl =
         points*qty;
@@ -2216,15 +2195,6 @@ function isTradeActive(t){
         t.points !== 0 ||
         t.pl !== 0 ||
         t.qty !== 0
-    );
-
-}
-
-
-function getActiveTrades(trades){
-
-    return trades.filter(
-        t=>isTradeActive(t)
     );
 
 }
@@ -2589,8 +2559,8 @@ function saveDay(){
 
 
     /*
-       If strategy.html is already loaded
-       inside the iframe, ask it to refresh.
+       Tell strategy dashboard that
+       journal data has changed.
     */
 
     const frame=
@@ -3110,9 +3080,6 @@ document.getElementById(
 
         renderMonthly();
 
-        /*
-           Refresh strategy dashboard if loaded.
-        */
 
         const frame=
             document.querySelector(
@@ -3833,7 +3800,7 @@ function showMonthly(){
 function showStrategy(){
 
     /*
-       Make sure the other pages are hidden.
+       Hide the other pages.
     */
 
     document.getElementById(
@@ -3850,10 +3817,10 @@ function showStrategy(){
 
 
     /*
-       Refresh strategy.html.
+       Force strategy.html to reload.
 
-       It will read the same
-       tradingJournal localStorage.
+       Date.now() prevents the browser
+       from displaying an old cached copy.
     */
 
     const frame=
@@ -3863,12 +3830,9 @@ function showStrategy(){
 
     if(frame){
 
-        frame.contentWindow.postMessage(
-            {
-                type:"TRADING_JOURNAL_REFRESH"
-            },
-            "*"
-        );
+        frame.src=
+            "strategy.html?v="+
+            Date.now();
 
     }
 
