@@ -27,12 +27,66 @@ body{
     background:#eef0f3;
     color:#111;
     font-family:Arial,Helvetica,sans-serif;
+    transition:background .2s,color .2s;
 }
 
 .dashboard{
     max-width:1400px;
     margin:auto;
     padding:18px;
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark-mode{
+    background:#181818;
+    color:#f5f5f5;
+}
+
+body.dark-mode .section,
+body.dark-mode .kpi{
+    background:#242424;
+    border-color:#444;
+    color:#f5f5f5;
+}
+
+body.dark-mode .strategy-card{
+    background:#202020;
+    border-color:#444;
+    color:#f5f5f5;
+}
+
+body.dark-mode .stat{
+    background:#292929;
+    border-color:#444;
+    color:#f5f5f5;
+}
+
+body.dark-mode .highlight{
+    background:#292929;
+    border-color:#444;
+    color:#f5f5f5;
+}
+
+body.dark-mode .highlight-title,
+body.dark-mode .kpi-label,
+body.dark-mode .kpi-small,
+body.dark-mode .detail-label{
+    color:#bbb;
+}
+
+body.dark-mode .detail-line{
+    border-color:#444;
+}
+
+body.dark-mode td{
+    border-color:#444;
+}
+
+body.dark-mode .footer{
+    color:#aaa;
 }
 
 /* =========================================================
@@ -414,15 +468,18 @@ td:nth-child(2){
 }
 
 .win{
-    background:#dff5df;
+    background:#c6efce;
+    color:#006100;
 }
 
 .loss{
-    background:#ffdede;
+    background:#ffc7ce;
+    color:#9c0006;
 }
 
 .breakeven{
-    background:#e8e8e8;
+    background:#ffeb9c;
+    color:#9c6500;
 }
 
 /* =========================================================
@@ -522,13 +579,9 @@ td:nth-child(2){
         padding:0 !important;
     }
 
-    /* Hide controls */
-
     .header-actions{
         display:none !important;
     }
-
-    /* Header */
 
     .header{
         border-radius:0 !important;
@@ -548,8 +601,6 @@ td:nth-child(2){
     .header p{
         font-size:10px !important;
     }
-
-    /* KPI */
 
     .kpi-grid{
         grid-template-columns:
@@ -583,8 +634,6 @@ td:nth-child(2){
         font-size:7px !important;
     }
 
-    /* Sections */
-
     .section{
         border-radius:0 !important;
 
@@ -604,8 +653,6 @@ td:nth-child(2){
 
         margin-bottom:4mm !important;
     }
-
-    /* Highlights */
 
     .highlight-grid{
         grid-template-columns:
@@ -635,8 +682,6 @@ td:nth-child(2){
         font-size:9px !important;
     }
 
-    /* Charts */
-
     .chart-grid{
         grid-template-columns:
             1fr 1fr !important;
@@ -656,8 +701,6 @@ td:nth-child(2){
     .chart-container{
         height:65mm !important;
     }
-
-    /* Strategy cards */
 
     .strategy-grid{
         grid-template-columns:
@@ -711,8 +754,6 @@ td:nth-child(2){
         font-size:7.5px !important;
     }
 
-    /* Ranking table */
-
     table{
         width:100% !important;
 
@@ -730,8 +771,6 @@ td:nth-child(2){
 
         padding:2.2mm 1.5mm !important;
     }
-
-    /* Trade table */
 
     .trade-detail-table{
         min-width:0 !important;
@@ -761,14 +800,10 @@ td:nth-child(2){
         padding:1.5mm 1mm !important;
     }
 
-    /* Prevent individual rows from splitting */
-
     tr{
         break-inside:avoid;
         page-break-inside:avoid;
     }
-
-    /* Footer */
 
     .footer{
         font-size:8px !important;
@@ -844,6 +879,12 @@ td:nth-child(2){
         <button
             onclick="refreshDashboard()">
             ↻ REFRESH
+        </button>
+
+        <button
+            id="themeButton"
+            onclick="toggleTheme()">
+            DARK
         </button>
 
         <button
@@ -1401,6 +1442,69 @@ document.getElementById(
     "dashboardMonth"
 ).value =
     selectedMonth;
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function toggleTheme(){
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+
+
+    const isDark =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+
+    localStorage.setItem(
+        "dashboardTheme",
+        isDark
+        ? "dark"
+        : "light"
+    );
+
+
+    document.getElementById(
+        "themeButton"
+    ).textContent =
+        isDark
+        ? "LIGHT"
+        : "DARK";
+
+}
+
+
+/* =========================================================
+   LOAD THEME
+========================================================= */
+
+function loadTheme(){
+
+    const savedTheme =
+        localStorage.getItem(
+            "dashboardTheme"
+        );
+
+
+    if(savedTheme === "dark"){
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+        document.getElementById(
+            "themeButton"
+        ).textContent =
+            "LIGHT";
+
+    }
+
+}
 
 
 /* =========================================================
@@ -3216,7 +3320,29 @@ function renderCharts(data){
 
                             breakeven
 
-                        ]
+                        ],
+
+                        backgroundColor:[
+
+                            "#22c55e",
+
+                            "#ef4444",
+
+                            "#facc15"
+
+                        ],
+
+                        borderColor:[
+
+                            "#ffffff",
+
+                            "#ffffff",
+
+                            "#ffffff"
+
+                        ],
+
+                        borderWidth:2
 
                     }]
 
@@ -3627,20 +3753,9 @@ function saveDashboardPDF(){
         true;
 
 
-    /*
-       Small delay allows Chart.js
-       to finish rendering.
-    */
-
     setTimeout(
 
         function(){
-
-            /*
-               Set a useful document title.
-               Android/Chrome will use this
-               as the suggested PDF filename.
-            */
 
             const oldTitle =
                 document.title;
@@ -3659,18 +3774,8 @@ function saveDashboardPDF(){
                 safeMonth;
 
 
-            /*
-               Open the native browser
-               print / Save as PDF screen.
-            */
-
             window.print();
 
-
-            /*
-               Restore title/button after
-               print dialog closes.
-            */
 
             setTimeout(
 
@@ -3703,6 +3808,8 @@ function saveDashboardPDF(){
 /* =========================================================
    INITIALIZE
 ========================================================= */
+
+loadTheme();
 
 refreshDashboard();
 
