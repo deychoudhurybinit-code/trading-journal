@@ -621,6 +621,38 @@ select{
 }
 
 
+/* =========================================================
+   TRADING RULEBOOK
+========================================================= */
+
+#rulebookPage{
+    line-height:1.5;
+}
+
+#rulebookPage h3{
+    background:#222;
+    color:white;
+    padding:8px 10px;
+    margin-top:20px;
+    margin-bottom:10px;
+    font-size:15px;
+}
+
+#rulebookPage h4{
+    border-bottom:1px solid #777;
+    padding-bottom:5px;
+    margin-top:18px;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+#rulebookPage p{
+    margin:4px 0;
+    font-size:12px;
+    font-weight:500;
+}
+
+
 .footer{
     text-align:center;
     font-weight:bold;
@@ -716,6 +748,10 @@ STRATEGY DASHBOARD
 
 <button onclick="window.print()">
 PRINT / SAVE PDF
+</button>
+
+<button onclick="showRulebook()">
+TRADING RULEBOOK
 </button>
 
 <button
@@ -1756,9 +1792,6 @@ DISCIPLINE TODAY, FREEDOM TOMORROW.
 
 <!-- =========================================================
      STRATEGY DASHBOARD
-     
-     Reads the same localStorage:
-     tradingJournal
 ========================================================= -->
 
 <div
@@ -1772,6 +1805,222 @@ DISCIPLINE TODAY, FREEDOM TOMORROW.
     src="strategy.html?v=2"
     title="Strategy Dashboard"
 ></iframe>
+
+</div>
+
+
+<!-- =========================================================
+     TRADING RULEBOOK
+========================================================= -->
+
+<div
+    class="page"
+    id="rulebookPage"
+    style="display:none"
+>
+
+<div class="monthly-title">
+TRADING RULEBOOK
+</div>
+
+<h3>1. MINDSET</h3>
+
+<p>• NO GREED.</p>
+<p>• NO FEAR.</p>
+<p>• JUST EXECUTE THE SETUP.</p>
+<p>• NO TRADE IS BETTER THAN A LOSS.</p>
+<p>• NEVER BREAK THE RULES.</p>
+
+<h3>2. SETUP RULE</h3>
+
+<p>• NO SETUP = NO TRADE.</p>
+<p>• Trade only when the complete setup is present.</p>
+<p>• Do not enter just because the market is moving.</p>
+<p>• Do not predict or force a trade.</p>
+<p>• Do not enter because you are afraid of missing the move.</p>
+<p>• Wait for the setup. Then execute.</p>
+<p>• A LOSS DOES NOT CREATE A NEW TRADE. ONLY A SETUP CREATES A TRADE.</p>
+
+<h3>3. RISK MANAGEMENT</h3>
+
+<p>• SL = 5 POINTS.</p>
+<p>• 2 SLs IN A DAY → STOP TRADING.</p>
+<p>• 40 POINTS EARNED → DAY CLOSED.</p>
+<p>• Never increase risk to recover a loss.</p>
+<p>• Never move the SL farther away to avoid taking a loss.</p>
+
+<h3>4. TRADE LIMIT</h3>
+
+<p>• MAXIMUM 3 TRADES PER DAY.</p>
+<p>• 3 TRADES IS A MAXIMUM, NOT A TARGET.</p>
+<p>• You do NOT have to take 3 trades.</p>
+<p>• You can finish the day with 0, 1, 2, or 3 trades.</p>
+<p>• NO OVERTRADING.</p>
+<p>• NO REVENGE TRADING.</p>
+
+<h3>5. BETWEEN-TRADE RULE</h3>
+
+<p>• After EVERY trade → WAIT.</p>
+<p>• After a losing trade: Mandatory 15-minute gap before another entry.</p>
+<p>• No entry during the 15-minute period.</p>
+<p>• After 15 minutes, enter ONLY if a valid setup appears.</p>
+<p>• After a winning trade: Mandatory 10-minute gap before another entry.</p>
+<p>• After 10 minutes, enter ONLY if a valid setup appears.</p>
+<p>• NO IMMEDIATE RE-ENTRY.</p>
+
+<h3>6. PREVENTING EARLY TRADES</h3>
+
+<p>• OLD MISTAKE: Taking trades too early and executing the 3 trades very quickly.</p>
+<p>• NEW RULE: DO NOT TRADE BECAUSE YOU HAVE TRADES AVAILABLE.</p>
+<p>• Wait for the complete setup.</p>
+<p>• Confirm the setup.</p>
+<p>• Execute only when the conditions are met.</p>
+<p>• If the setup does not appear → DO NOTHING.</p>
+<p>• PATIENCE IS PART OF THE STRATEGY.</p>
+
+<h3>7. PREVENTING REVENGE TRADING</h3>
+
+<p>• OLD MISTAKE: After a loss, immediately taking another trade without a setup to recover the loss.</p>
+<p>• NEW RULE: LOSS → STOP → WAIT 15 MINUTES → RESET → LOOK FOR SETUP.</p>
+<p>• Never take a trade with the thought: "I need to recover my loss."</p>
+<p>• Instead: "My previous trade is finished. I only trade the next valid setup."</p>
+
+<h3>8. PREVENTING OVERTRADING</h3>
+
+<p>• OLD MISTAKE: Taking additional trades to recover losses or make more profit.</p>
+<p>• NEW RULE: Maximum 3 trades per day.</p>
+<p>• Never exceed 3 trades.</p>
+<p>• Never take an extra trade because you are losing.</p>
+<p>• Never take an extra trade because you want more profit.</p>
+<p>• Never chase a missed move.</p>
+<p>• Never force a setup.</p>
+<p>• 3 TRADES = MAXIMUM, NOT A DAILY REQUIREMENT.</p>
+
+<h3>9. EXECUTION</h3>
+
+<p>• Before entering:</p>
+<p>• 1. Is there a valid setup? → If NO: NO TRADE.</p>
+<p>• 2. Is the setup confirmed? → If NO: WAIT.</p>
+<p>• 3. Am I entering because of greed, fear, FOMO, or revenge? → If YES: NO TRADE.</p>
+<p>• 4. Am I within my daily limits? → If NO: STOP.</p>
+<p>• 5. If everything is valid: → EXECUTE THE SETUP.</p>
+
+<h3>GOLDEN RULES</h3>
+
+<p>• NO SETUP = NO TRADE.</p>
+<p>• 3 TRADES IS A MAXIMUM, NOT A TARGET.</p>
+<p>• A LOSS DOES NOT CREATE A NEW TRADE. ONLY A SETUP CREATES A TRADE.</p>
+<p>• NO TRADE IS BETTER THAN A LOSS.</p>
+<p>• NEVER BREAK THE RULES.</p>
+
+<h3>REMEMBER</h3>
+
+<p>• DISCIPLINE > EMOTION</p>
+<p>• PATIENCE > IMPULSE</p>
+<p>• EXECUTION > PREDICTION</p>
+<p>• SETUP > FOMO</p>
+<p>• NO TRADE > BAD TRADE</p>
+<p>• PROTECT CAPITAL FIRST.</p>
+
+<h3>TRADING SETUPS — 1 TO 7</h3>
+
+<h4>Setup 1 — Moving Average</h4>
+
+<p>• 5 SMA</p>
+<p>• 9 EMA</p>
+<p>• 30 WMA</p>
+<p>• Market must be clearly trending.</p>
+<p>• If the market is choppy/sideways, do not follow the MA signals.</p>
+<p>• If the crossover happens after a big candle without a proper setup → do not enter.</p>
+<p>• Wait for the 5-minute candle to close before entering.</p>
+<p>• Do not chase if price is already significantly extended from the moving averages.</p>
+<p>• Initial stop-loss: 5 points.</p>
+<p>• At +5 points: move SL to cost/breakeven.</p>
+<p>• Normal setup: approximately 12 points target.</p>
+<p>• Breakout of a pattern, support, resistance, or trendline: 20+ points target.</p>
+
+<h4>Setup 2 — TD Resistance</h4>
+
+<p>• Trendline/resistance must have a minimum of 1 previous test.</p>
+<p>• Enter when the TD Resistance setup is confirmed.</p>
+<p>• Initial SL: 5 points.</p>
+<p>• At +5: SL → cost.</p>
+<p>• At +10: SL → +5 points.</p>
+<p>• At +15: SL → +10 points.</p>
+<p>• At +20: SL → +15 points.</p>
+<p>• At +25: SL → +20 points.</p>
+<p>• After +15, continue trailing 10 points behind price.</p>
+<p>• No fixed target.</p>
+<p>• Primary exit is near the resistance.</p>
+<p>• If profit reaches 10+ points, the trade can be closed.</p>
+
+<h4>Setup 3 — TD Breakout</h4>
+
+<p>• Same TD trendline/resistance requirement as Setup 2.</p>
+<p>• Trendline/resistance must have a minimum of 1 previous test.</p>
+<p>• A breakout of the resistance/trendline is required.</p>
+<p>• If a long candle breaks through the level, do not enter immediately.</p>
+<p>• Wait for a retest of the broken level.</p>
+<p>• Enter only after the retest confirms the breakout.</p>
+<p>• No breakout = no Setup 3 trade.</p>
+<p>• Initial SL: 5 points.</p>
+<p>• At +5: SL → cost.</p>
+<p>• At +10: SL → +5 points.</p>
+<p>• At +15: SL → +10 points.</p>
+<p>• At +20: SL → +15 points.</p>
+<p>• At +25: SL → +20 points.</p>
+<p>• After +15, continue trailing 10 points behind price.</p>
+<p>• No fixed target.</p>
+<p>• If resistance is ahead and profit is 10+ points, exit near the resistance.</p>
+<p>• Otherwise, continue following the trailing stop-loss.</p>
+
+<h4>Setup 4 — Pattern</h4>
+
+<p>• Identify a clear pattern/drawing.</p>
+<p>• Mark the support and resistance of the drawing.</p>
+<p>• At resistance → look for a sell/PE.</p>
+<p>• At support → look for a buy/CE.</p>
+<p>• Wait for confirmation before entering.</p>
+<p>• Risk & Target: To be defined.</p>
+
+<h4>Setup 5 — Choppy Market / Box</h4>
+
+<p>• Market is moving inside a clear box/range.</p>
+<p>• Identify the support and resistance of the box.</p>
+<p>• Near resistance → play the resistance side.</p>
+<p>• Near support → play the support side.</p>
+<p>• Target: 5 points.</p>
+<p>• 7 points earned is also enough to close.</p>
+<p>• Do not follow the moving-average direction in the choppy market.</p>
+<p>• If the box breaks out clearly, stop treating it as a choppy-market trade.</p>
+
+<h4>Setup 6 — PE at Resistance / CE at Support</h4>
+
+<p>• PE at Resistance.</p>
+<p>• CE at Support.</p>
+<p>• Initial SL: 5 points.</p>
+<p>• At +5 points in the trade's direction → SL to cost/breakeven.</p>
+<p>• Target at the next support or resistance.</p>
+<p>• At +15 points → start trailing SL by 10 points.</p>
+<p>• Continue trailing as price moves further in the trade's direction.</p>
+
+<h4>Setup 7 — Candlestick Pattern</h4>
+
+<p>• 5-minute chart.</p>
+<p>• Identify a clear candlestick pattern.</p>
+<p>• Check whether the candlestick pattern is forming near a Support or Resistance.</p>
+<p>• Also check whether it is forming near a TD breakout level.</p>
+<p>• If the pattern is not near a relevant S/R or TD breakout → do not take the trade.</p>
+<p>• Initial SL: 5 points.</p>
+<p>• At +5 points → SL to cost/breakeven.</p>
+<p>• Target near the relevant Support/Resistance.</p>
+<p>• If profit reaches 10+ points, close the trade.</p>
+
+<h3>MY FINAL TRADING PRINCIPLE</h3>
+
+<p>• My only job is to trade my setups</p>
+<p>• and follow my rules.</p>
+<p>• I do not need to make money on every trade.</p>
 
 </div>
 
@@ -2557,11 +2806,6 @@ function saveDay(){
 
     renderMonthly();
 
-
-    /*
-       Tell strategy dashboard that
-       journal data has changed.
-    */
 
     const frame=
         document.querySelector(
@@ -3775,6 +4019,10 @@ function showDaily(){
         "strategyPage"
     ).style.display="none";
 
+    document.getElementById(
+        "rulebookPage"
+    ).style.display="none";
+
 }
 
 
@@ -3794,14 +4042,14 @@ function showMonthly(){
         "strategyPage"
     ).style.display="none";
 
+    document.getElementById(
+        "rulebookPage"
+    ).style.display="none";
+
 }
 
 
 function showStrategy(){
-
-    /*
-       Hide the other pages.
-    */
 
     document.getElementById(
         "dailyPage"
@@ -3815,13 +4063,10 @@ function showStrategy(){
         "strategyPage"
     ).style.display="block";
 
+    document.getElementById(
+        "rulebookPage"
+    ).style.display="none";
 
-    /*
-       Force strategy.html to reload.
-
-       Date.now() prevents the browser
-       from displaying an old cached copy.
-    */
 
     const frame=
         document.querySelector(
@@ -3835,6 +4080,31 @@ function showStrategy(){
             Date.now();
 
     }
+
+}
+
+
+/* =========================================================
+   TRADING RULEBOOK
+========================================================= */
+
+function showRulebook(){
+
+    document.getElementById(
+        "dailyPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "monthlyPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "strategyPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "rulebookPage"
+    ).style.display="block";
 
 }
 
